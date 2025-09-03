@@ -1,7 +1,9 @@
 {
-  "lastUpdated": "2025-09-03T18:23:02Z",
+  "lastUpdated": "2025-09-03T18:37:11.150248",
   "articles": [],
   "stats": {
-    "note": "Placeholder; will be replaced by workflow."
+    "count": 0,
+    "feed": "https://www.boston.com/feed/bdc-ms",
+    "model": "gpt-5"
   }
 }
