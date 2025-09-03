@@ -15,7 +15,7 @@ What it does
 Env vars
   OPENAI_API_KEY  (required to generate live summaries)
   FEED_URL        (optional) default: https://www.boston.com/feed/bdc-ms
-  OPENAI_MODEL    (optional) default: gpt-5
+  OPENAI_MODEL    (optional) default: gpt-5   (kept for compatibility)
   MAX_ITEMS       (optional) default: 12
 """
 
@@ -58,11 +58,11 @@ def env_int(name: str, default: int) -> int:
 # ----------------------------- Configuration -------------------------------
 
 FEED_URL     = env_str("FEED_URL", "https://www.boston.com/feed/bdc-ms")
-OPENAI_MODEL = env_str("OPENAI_MODEL", "gpt-5")   # default to GPT-5
+OPENAI_MODEL = env_str("OPENAI_MODEL", "gpt-5")   # still read this if you set it
 MAX_ITEMS    = env_int("MAX_ITEMS", 12)
 
-# Ordered model fallbacks (adjust order if you prefer)
-PREFERRED_MODELS = [OPENAI_MODEL, "gpt-5o-mini", "gpt-4o", "gpt-4o-mini"]
+# Ordered model fallbacks — start with models everyone has
+PREFERRED_MODELS = ["gpt-4o", "gpt-4o-mini", OPENAI_MODEL, "gpt-5o-mini"]
 
 OUT_NOW     = "news-data.json"
 OUT_HISTORY = "news-history.json"
@@ -336,7 +336,7 @@ def summarize(articles: List[Article]) -> Dict[str, Any]:
     return {
         "lastUpdated": datetime.now().isoformat(),
         "articles": out,
-        "stats": {"count": len(out), "feed": FEED_URL, "model": PREFERRED_MODELS[0]},
+        "stats": {"count": len(out), "feed": FEED_URL, "model": next(iter(PREFERRED_MODELS), "unknown")},
     }
 
 
